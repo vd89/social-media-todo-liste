@@ -1,4 +1,7 @@
 import crypto from 'crypto';
+import config from '../appConfig.js';
+
+const { algorithm } = config;
 
 export const generateRandomString = (_length) => {
   return crypto
