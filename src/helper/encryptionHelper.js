@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import config from '../appConfig.js';
+import appConfig from '../appConfig.js';
 
-const { algorithm } = config;
+const { encryptionKey, algorithm, jwtSecret } = appConfig;
 
 export const generateRandomString = (_length) => {
   return crypto
@@ -16,22 +16,32 @@ export const hashString = (_value, _salt) => {
   return hash.digest('hex');
 };
 
-export const encrypt = (_text) => {
+export const encrypt = async (_text) => {
   const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(algorithm, Buffer.from(ENCRYPTION_KEY), iv);
+  const cipher = crypto.createCipheriv(algorithm, Buffer.from(encryptionKey), iv);
   let encrypted = cipher.update(_text);
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 };
 
-export const decrypt = (_text) => {
+export const decrypt = async (_text) => {
   const textParts = _text.split(':');
   const iv = Buffer.from(textParts.shift(), 'hex');
   const encryptedText = Buffer.from(textParts.join(':'), 'hex');
-  const decipher = crypto.createDecipheriv(algorithm, Buffer.from(ENCRYPTION_KEY), iv);
+  const decipher = crypto.createDecipheriv(algorithm, Buffer.from(encryptionKey), iv);
   let decrypted = decipher.update(encryptedText);
-
   decrypted = Buffer.concat([decrypted, decipher.final()]);
-
   return decrypted.toString();
+};
+
+export const comparePassword = async (_pass, _hashPass) => {
+  return (await decrypt(_hashPass)) === _pass ? true : false;
+};
+
+export const generateAuthToken = async (_id) => {
+  return await jwt.sign({ user: { _id } }, jwtSecret, { expiresIn: '10h' });
+};
+
+export const tokenVerify = async (_token) => {
+  return await jwt.verify(_token, jwtSecret);
 };

@@ -56,7 +56,7 @@ app.use(i18n.init);
 app.use(cookieParser());
 app.use(
     session({
-      name: 'back-end-temp',
+      name: 'social-media-todo',
       key: sessionConfig.key,
       secret: sessionConfig.secret,
       resave: sessionConfig.resave,
@@ -76,6 +76,10 @@ app.use(sessionClear);
 app.use(extendedRequestMiddleware);
 
 app.all('*', headerFunction);
+
+/* Importing the Model
+ */
+import './models/index.js';
 
 app.get('/', testAuth);
 app.get('/ping', pingRes);
