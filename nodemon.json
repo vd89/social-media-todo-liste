@@ -1,0 +1,5 @@
+{
+ "verbose": false,
+ "watch": ["./src"],
+ "exec": "cross-env DEBUG=app:*  node ."
+}

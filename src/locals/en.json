@@ -1,0 +1,16 @@
+{
+ "SUCCESS": "Success",
+ "REGISTRATION_SUCCESS": "Registration Success",
+ "SIGNED_SUCCESS": "Signed Success",
+ "USER_ALREADY_REGISTERED": "User is already registered",
+ "UNAVAILABLE": "Unavailable",
+ "ACCESS_DENIED": "Access Denied",
+ "SIGNED_OUT_SUCCESS": "Signed Out Success",
+ "USER_IS_NOT_AUTHORIZED": "User is not authorized",
+ "USER_NOT_FOUND": "User not found",
+ "POST_NOT_FOUND": "Post not found",
+ "ALREADY_LIKED_BY_USER": "Already liked by user",
+ "ALREADY_UNLINED_BY_USER": "Already unlined by user",
+ "USER_COMMENTED_ONCE": "User Commented once",
+ "REMOVE_POST": "Removed Post"
+}

@@ -1,0 +1,11 @@
+{
+ "PROJECT_NAME": "BACK-END-TEMPLATE",
+ "ENVIRONMENT": "development",
+ "PORT": 8000,
+ "DEFAULT_LANGUAGE": "en",
+ "AVAILABLE_LOCALS": ["en"],
+ "SESSION_SECRET": "",
+ "JWT_SECRET": "",
+ "CORS_WHITELIST": ["http://localhost:8000/"],
+ "MONGO_URL": "mongodb://${user}:${password}@localhost:27017/dev_data_viz?authSource=admin"
+}
