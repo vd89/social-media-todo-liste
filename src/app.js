@@ -25,6 +25,7 @@ i18n.configure({
   directory: path.join(projectRoot, 'src', 'locals'),
   defaultLocale: defaultLanguage,
 });
+
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1); // trust first proxy
   sessionConfig.cookies.secure = true; // serve secure cookies
@@ -71,7 +72,6 @@ app.use(helmet());
 app.set('showStackError', true);
 app.use('*', cors(corsOptionsDelegate));
 
-
 app.use(sessionClear);
 app.use(extendedRequestMiddleware);
 
@@ -81,8 +81,8 @@ app.get('/', testAuth);
 app.get('/ping', pingRes);
 app.use('/api', apiRoutes);
 
+app.use(notFound);
 app.use(unauthorizedErrors);
 app.use(errHandler);
-app.use(notFound);
 
 export default app;

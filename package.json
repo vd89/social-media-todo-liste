@@ -33,13 +33,35 @@
   "dotenv": "^16.0.2",
   "eslint": ">=5.16.0",
   "eslint-config-google": "^0.14.0",
+  "jest": "^29.3.1",
   "nodemon": "^2.0.20",
-  "prettier": "^2.7.1"
+  "prettier": "^2.7.1",
+  "supertest": "^6.3.3"
  },
+ "jest": {
+  "testEnvironment": "node",
+  "testRegex": "((\\.|/*.)(test))\\.js?$",
+  "verbose": true,
+  "roots": [
+    "__tests__"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 80,
+      "functions": 20,
+      "lines": 60,
+      "statements": 60
+    }
+  },
+  "moduleFileExtensions": [ "js", "json"],
+  "coverageDirectory": "../coverage"
+},
  "scripts": {
   "dev": "cross-env DEBUG=app:* node --watch index.js",
   "start": "NODE_ENV=production DEBUG=app:* node .",
   "remove": "rm -rf dist node_modules",
-  "db:init": "docker compose -f int-setup/docker-compose.yaml up -d"
+  "db:init": "docker compose -f int-setup/docker-compose.yaml up -d",
+  "test": "NODE_ENV=test node --experimental-vm-modules node_modules/.bin/jest --testTimeout=5000",
+  "test:cov": "node --experimental-vm-modules node_modules/.bin/jest --coverage"
  }
 }
