@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import appConfig from '../appConfig.js';
 
 const { encryptionKey, algorithm, jwtSecret } = appConfig;
