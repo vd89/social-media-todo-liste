@@ -1,6 +1,6 @@
 import debug from 'debug';
 
-const log = debug('app:extraHelper -> ');
+const logger = debug('app:extraHelper -> ');
 
 export const testAuth = async (req, res, next) => {
   try {
@@ -8,9 +8,9 @@ export const testAuth = async (req, res, next) => {
       testDetails: 'The test is working fine ',
     };
     return res.ok({ message: 'SUCCESS', data: testData });
-  } catch (e) {
-    log(e.message);
-    next(e);
+  } catch (err) {
+    logger(err.message);
+    next(err);
   }
 };
 
@@ -20,8 +20,8 @@ export const pingRes = async (req, res, next) => {
       pongDetails: 'This is the the pong response',
     };
     return res.ok({ message: 'SUCCESS', data: pongData });
-  } catch (e) {
-    log(e.message);
-    next(e);
+  } catch (err) {
+    logger(err.message);
+    next(err);
   }
 };

@@ -30,7 +30,7 @@ const logRequest = async (req, message = '', resPayload = '') => {
 export const extendedRequestMiddleware = (req, res, next) => {
   req.allParams = () => _.merge(req.params, req.query, req.body);
 
-  res.set('x-application-identifier', `back-end-template-${environment}`);
+  res.set('x-application-identifier', `social-media-todo-${environment}`);
 
   res.ok = (resPayload = {}) => {
     if (typeof resPayload === 'string') {

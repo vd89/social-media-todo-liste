@@ -4,7 +4,7 @@ import path from 'path';
 const __dirname = path.resolve();
 
 export default {
- port: config.get('PORT') || process.env.PORT || '',
+  port: config.get('PORT') || process.env.PORT || '',
   availableLocals: config.get('AVAILABLE_LOCALS') || process.env.AVAILABLE_LOCALS || '',
   defaultLanguage: config.get('DEFAULT_LANGUAGE') || process.env.DEFAULT_LANGUAGE || '',
   projectRoot: path.join(__dirname, '.'),

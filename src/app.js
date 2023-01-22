@@ -25,6 +25,7 @@ i18n.configure({
   directory: path.join(projectRoot, 'src', 'locals'),
   defaultLocale: defaultLanguage,
 });
+
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1); // trust first proxy
   sessionConfig.cookies.secure = true; // serve secure cookies
@@ -55,7 +56,7 @@ app.use(i18n.init);
 app.use(cookieParser());
 app.use(
     session({
-      name: 'back-end-temp',
+      name: 'social-media-todo',
       key: sessionConfig.key,
       secret: sessionConfig.secret,
       resave: sessionConfig.resave,
@@ -71,11 +72,14 @@ app.use(helmet());
 app.set('showStackError', true);
 app.use('*', cors(corsOptionsDelegate));
 
-
 app.use(sessionClear);
 app.use(extendedRequestMiddleware);
 
 app.all('*', headerFunction);
+
+/* Importing the Model
+ */
+import './models/index.js';
 
 app.get('/', testAuth);
 app.get('/ping', pingRes);

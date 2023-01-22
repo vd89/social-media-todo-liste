@@ -1,10 +1,17 @@
 import debug from 'debug';
+import { getUserData } from '../controllers/userCtrl.js';
+import { tokenVerify } from '../helper/encryptionHelper.js';
 const appLog = debug('app:middleware -> ');
 
 export const notFound = (req, res, next) => {
   res.status(404);
-  const error = new Error(` 🔍 Not Found -${req.originalUrl}`);
-  next(error);
+  // const error = `🔍 Not Found -${req.originalUrl}`;
+  res.json({
+    data: {
+      msg: `🔍 Not Found -${req.originalUrl}`,
+    },
+  });
+  next();
 };
 
 export const errHandler = (err, req, res, next) => {
@@ -35,7 +42,7 @@ export const headerFunction = (req, res, next) => {
         'x-client-id',
         'x-client-secret',
         'x-client-device',
-        'x-back-end-template-token',
+        'x-social-media-todo-token',
       ].join(', '),
   );
   if (req.method === 'OPTIONS') {
@@ -54,3 +61,19 @@ export const unauthorizedErrors = (err, req, res, next) => {
   next();
 };
 
+export const userAuth = async (req, res, next) => {
+  const getToken = req.header('x-social-media-todo-token');
+  if (!getToken) {
+    return res.unauthorized(`Don't have the, authorization to access`);
+  }
+  // Verify the Token
+  try {
+    const deCoded = await tokenVerify(getToken);
+    const user = await getUserData(deCoded.user);
+    user.password = undefined;
+    req.user = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
+};

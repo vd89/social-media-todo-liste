@@ -17,8 +17,8 @@ export const sessionConfig = {
 };
 
 export const sessionClear = (req, res, next) => {
-  if (req.cookies['back-end-temp'] && !req.session.user) {
-    res.clearCookie('back-end-temp');
+  if (req.cookies['social-media-todo'] && !req.session.user) {
+    res.clearCookie('social-media-todo');
   }
   next();
 };
@@ -27,11 +27,11 @@ export const sessionCheck = (req, res, next) => {
   const { cookies, session } = req;
 
   const check =
-   !_.isEmpty(cookies) &&
-   cookies.back-end-temp &&
-   _.isString(cookies.back-end-temp) &&
-   cookies.back-end-temp.includes(session.id) &&
-   session.user;
+  !_.isEmpty(cookies) &&
+  cookies.social - media - todo &&
+  _.isString(cookies.social - media - todo) &&
+  cookies.social - media - todo.includes(session.id) &&
+  session.user;
   if (check) {
     next();
   } else return res.status(403).error('USER_IS_NOT_AUTHORIZED');
