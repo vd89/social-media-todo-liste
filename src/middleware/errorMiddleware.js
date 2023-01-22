@@ -3,8 +3,13 @@ const appLog = debug('app:middleware -> ');
 
 export const notFound = (req, res, next) => {
   res.status(404);
-  const error = new Error(` 🔍 Not Found -${req.originalUrl}`);
-  next(error);
+  // const error = `🔍 Not Found -${req.originalUrl}`;
+  res.json({
+    data: {
+      msg: `🔍 Not Found -${req.originalUrl}`,
+    },
+  });
+  next();
 };
 
 export const errHandler = (err, req, res, next) => {
@@ -35,7 +40,7 @@ export const headerFunction = (req, res, next) => {
         'x-client-id',
         'x-client-secret',
         'x-client-device',
-        'x-back-end-template-token',
+        'x-social-media-todo-token',
       ].join(', '),
   );
   if (req.method === 'OPTIONS') {
@@ -53,4 +58,3 @@ export const unauthorizedErrors = (err, req, res, next) => {
   }
   next();
 };
-
