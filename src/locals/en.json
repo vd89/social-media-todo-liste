@@ -16,5 +16,7 @@
 	"Please go for Login": "Please go for Login",
 	"LOGGED_IN_SUCCESS": "LOGGED_IN_SUCCESS",
 	"Password incorrect": "Password incorrect",
-	"Not a valid user credentials ": "Not a valid user credentials "
+	"Not a valid user credentials ": "Not a valid user credentials ",
+	"Updated the todo": "Updated the todo",
+	"Deleted the todo": "Deleted the todo"
 }

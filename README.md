@@ -1,4 +1,4 @@
-# Backend-template
+# Social Media App with todo
 
 ### What is this repository for?
 
@@ -17,9 +17,9 @@
 
     ```
     node -v;
-    // v16.17.1
+    // v19.3.0
     npm -v;
-    // 8.15.0
+    // 9.2.0
     yarn --version
     // 1.22.19
     docker -v;

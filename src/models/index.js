@@ -1,4 +1,4 @@
 import './commentModel.js';
 import './postModel.js';
-import './todoMotel.js';
+import './todoModel.js';
 import './userModel.js';

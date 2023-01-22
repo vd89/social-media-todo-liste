@@ -49,3 +49,22 @@ export const loginUser = async (req, res, next) => {
     next(err);
   }
 };
+
+export const userLogout = async (req, res, next) => {
+  try {
+    req.session.destroy();
+    return res.ok('SIGNED_OUT_SUCCESS');
+  } catch (err) {
+    logger(err.message);
+    next(err);
+  }
+};
+
+// helper for the auth
+export const getUserData = async (id) => {
+  try {
+    return await User.findById(id);
+  } catch (err) {
+    logger(err.message);
+  }
+};
