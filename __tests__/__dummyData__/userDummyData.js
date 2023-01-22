@@ -44,4 +44,30 @@ export default {
       msg: 'Please enter a password with 6 or more characters',
     },
   ],
+  loginError: [
+    {
+      body: 'userName',
+      msg: 'userName  is required',
+    },
+    {
+      body: 'password',
+      msg: 'Please enter a password with 6 or more characters',
+    },
+    {
+      body: 'password',
+      msg: 'Please enter a password with 6 or more characters',
+    },
+  ],
+  wrongUser: {
+    userName: 'jamesB',
+    password: 'Test_1234',
+  },
+  wrongPass: {
+    userName: 'jamesBond',
+    password: 'Test_12',
+  },
+  correctUser: {
+    userName: 'jamesBond',
+    password: 'Test_1234',
+  },
 };

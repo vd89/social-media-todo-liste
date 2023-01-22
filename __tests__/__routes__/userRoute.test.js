@@ -3,7 +3,18 @@ import app from '../../src/app.js';
 import { dropCollections, dropDatabase, setup } from '../../src/helper/dbConnectionHelper.js';
 import dummyData from '../__dummyData__/userDummyData.js';
 
-const { emailCheck, testUser, errorResp, emailCheckResponse, passCheck, passCheckResponse } = dummyData;
+const {
+  emailCheck,
+  testUser,
+  errorResp,
+  emailCheckResponse,
+  passCheck,
+  passCheckResponse,
+  loginError,
+  wrongUser,
+  wrongPass,
+  correctUser,
+} = dummyData;
 
 beforeAll(async () => {
   await setup();
@@ -71,5 +82,47 @@ describe('User Routes', () => {
     expect(res.body).not.toBeUndefined();
     expect(res.body.errors).not.toBeUndefined();
     expect(res.body.errors).toEqual(passCheckResponse);
+  });
+});
+
+describe('User Login Route', () => {
+  test('Should not Login with no data', async () => {
+    const res = await request(app).post('/api/v1/user/login').send();
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(400);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.errors).not.toBeUndefined();
+    expect(res.body.errors).toEqual(loginError);
+  });
+
+  test('Should not Login with wrong userName', async () => {
+    const res = await request(app).post('/api/v1/user/login').send(wrongUser);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(400);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.error).not.toBeUndefined();
+    expect(res.body.error).toEqual('Not a valid user credentials ');
+  });
+
+  test('Should not Login with wrong password ', async () => {
+    const res = await request(app).post('/api/v1/user/login').send(wrongPass);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(400);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.error).not.toBeUndefined();
+    expect(res.body.error).toEqual('Password incorrect');
+  });
+
+  test('Should login with correct data ', async () => {
+    const res = await request(app).post('/api/v1/user/login').send(correctUser);
+    const { user, token } = res.body.data;
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.message).toBe('LOGGED_IN_SUCCESS');
+    expect(res.body.data).not.toBeUndefined();
+    expect(user).not.toBeUndefined();
+    expect(user.userName).toBe('jamesBond');
+    expect(token).toBeDefined();
   });
 });
