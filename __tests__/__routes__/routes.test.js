@@ -26,14 +26,6 @@ afterAll(async () => {
 });
 
 describe('User Routes', () => {
-  test('Test Route for the user /api/v1/user get()', async () => {
-    const res = await request(app).get('/api/v1/user/');
-    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
-    expect(res.statusCode).toBe(200);
-    expect(res.body).not.toBeUndefined();
-    expect(res.body.status).toBe('SUCCESS');
-  });
-
   test('should register at /api/v1/user/register', async () => {
     const res = await request(app).post('/api/v1/user/register').send(testUser);
     const { user, token } = res.body.data;
@@ -125,6 +117,13 @@ describe('User Login Route', () => {
     expect(user.userName).toBe('jamesBond');
     expect(token).toBeDefined();
     authToken = token;
+  });
+  test('Test Route for the user /api/v1/user get()', async () => {
+    const res = await request(app).get('/api/v1/user/').set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('GOT_ALL_USERS');
   });
 });
 
@@ -238,6 +237,72 @@ describe('Todo Routes', () => {
 
   test('Test Route for the user /api/v1/todo', async () => {
     const res = await request(app).get('/api/v1/todo/').set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('SUCCESS');
+  });
+});
+
+const postObj = {
+  postID: '',
+};
+describe('Post Routes', () => {
+  test('Should not Access with out authorization /api/v1/post', async () => {
+    const res = await request(app).get('/api/v1/post/');
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(401);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('UNAUTHORIZED');
+  });
+
+  test('Should Access with authorization and Create /api/v1/post', async () => {
+    const res = await request(app)
+        .post('/api/v1/post/')
+        .send({
+          title: 'this is new Post asdfasdf',
+          postBody:
+     'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.',
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('POST_CREATED');
+    postObj.postID = res.body.data._id;
+  });
+
+  test('Should Access with authorization and not edit  /api/v1/post', async () => {
+    const res = await request(app)
+        .put('/api/v1/post/1321654654')
+        .send({
+          title: 'this',
+          postBody:
+     'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or ',
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(400);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('Wrong post Id pls check');
+  });
+
+  test('Should Access with authorization and not edit  /api/v1/post', async () => {
+    const res = await request(app)
+        .put(`/api/v1/post/${postObj.postID}`)
+        .send({
+          title: 'this',
+          postBody:
+     'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or ',
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('POST_EDITED');
+  });
+  test('Should  Access with authorization /api/v1/post', async () => {
+    const res = await request(app).get('/api/v1/post/').set('x-social-media-todo-token', `${authToken}`);
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(200);
     expect(res.body).not.toBeUndefined();

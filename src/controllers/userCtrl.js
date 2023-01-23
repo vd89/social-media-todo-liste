@@ -1,6 +1,7 @@
 import debug from 'debug';
 import User from '../models/userModel.js';
 import { comparePassword, encrypt, generateAuthToken } from '../helper/encryptionHelper.js';
+import { isValidObjectId } from 'mongoose';
 
 const logger = debug('app:userCtl -> ');
 
@@ -66,5 +67,30 @@ export const getUserData = async (id) => {
     return await User.findById(id);
   } catch (err) {
     logger(err.message);
+  }
+};
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().populate();
+    return res.ok({ message: 'GOT_ALL_USERS', data: users });
+  } catch (err) {
+    logger(err.message);
+    next(err);
+  }
+};
+
+export const getUserById = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    if (!isValidObjectId(userId)) {
+      return res.error({ message: 'The UserId is inCorrect' });
+    }
+    const user = await User.findById(userId);
+
+    return res.ok({ message: 'GOT_USE', data: user });
+  } catch (err) {
+    logger(err);
+    next(err);
   }
 };
