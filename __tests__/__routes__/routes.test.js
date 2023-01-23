@@ -132,7 +132,7 @@ const todo = {
 };
 
 describe('Todo Routes', () => {
-  test('Test Route for the user /api/v1/todo get()', async () => {
+  test('Should not access without Authorization /api/v1/todo', async () => {
     const res = await request(app).get('/api/v1/todo/');
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(401);
@@ -140,7 +140,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('UNAUTHORIZED');
   });
 
-  test('Test Route for the user to create POST-> /api/v1/todo', async () => {
+  test('Should access and  create todo /api/v1/todo', async () => {
     const res = await request(app)
         .post('/api/v1/todo/')
         .send({
@@ -155,7 +155,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('SUCCESS');
     todo.todoId = res.body.data._id;
   });
-  test('Test Route for the user to edit TODo POST-> /api/v1/todo', async () => {
+  test('Should access and  edit with correct id todo /api/v1/todo', async () => {
     const res = await request(app)
         .post(`/api/v1/todo/${todo.todoId}`)
         .send({
@@ -173,7 +173,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('Updated the todo');
   });
 
-  test('Test Route for the user to edit TODo POST-> /api/v1/todo', async () => {
+  test('Should access and not edit without correct id todo /api/v1/todo', async () => {
     const res = await request(app)
         .post(`/api/v1/todo/123456879`)
         .send({
@@ -191,7 +191,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('Please check the todo id');
   });
 
-  test('Test Route for the user to edit TODo POST-> /api/v1/todo', async () => {
+  test('Should access and not edit without correct id todo  to complete /api/v1/todo', async () => {
     const res = await request(app).put(`/api/v1/todo/12345678`).set('x-social-media-todo-token', `${authToken}`);
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(400);
@@ -202,7 +202,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('Please check the todo id');
   });
 
-  test('Test Route for the user to Edit to Complete-> PUT /api/v1/todo', async () => {
+  test('Should access and edit with correct id todo  to complete ', async () => {
     const res = await request(app).put(`/api/v1/todo/${todo.todoId}`).set('x-social-media-todo-token', `${authToken}`);
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(200);
@@ -213,7 +213,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('Updated the todo');
   });
 
-  test('Test Route for the user to edit TODo POST-> /api/v1/todo', async () => {
+  test('Should access and not delete without correct id /api/v1/todo', async () => {
     const res = await request(app).delete(`/api/v1/todo/12345678`).set('x-social-media-todo-token', `${authToken}`);
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(400);
@@ -224,7 +224,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('Please check the todo id');
   });
 
-  test('Test Route for the user to create POST-> /api/v1/todo', async () => {
+  test('Should access and delete with correct id  /api/v1/todo', async () => {
     const res = await request(app).delete(`/api/v1/todo/${todo.todoId}`).set('x-social-media-todo-token', `${authToken}`);
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(200);
@@ -235,7 +235,7 @@ describe('Todo Routes', () => {
     expect(res.body.status).toBe('Deleted the todo');
   });
 
-  test('Test Route for the user /api/v1/todo', async () => {
+  test('Should get all the todos with access', async () => {
     const res = await request(app).get('/api/v1/todo/').set('x-social-media-todo-token', `${authToken}`);
     expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
     expect(res.statusCode).toBe(200);
@@ -307,5 +307,54 @@ describe('Post Routes', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).not.toBeUndefined();
     expect(res.body.status).toBe('SUCCESS');
+  });
+});
+
+describe('Comment Routes', () => {
+  test('Should not Access without Authorization /api/v1/comment ', async () => {
+    const res = await request(app).get('/api/v1/comment/');
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(401);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('UNAUTHORIZED');
+  });
+
+  test('Should Access to create with error on postId /api/v1/comment ', async () => {
+    const res = await request(app)
+        .post('/api/v1/comment/123456')
+        .send({
+          title: 'this is new Post asdfasdf',
+          commentBody: 'There are many variations',
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(400);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('Post Id is not valid and wrong pls check');
+    expect(res.body.data).not.toBeUndefined();
+  });
+
+  test('Should Access to create with error on postId /api/v1/comment ', async () => {
+    const res = await request(app)
+        .post(`/api/v1/comment/${postObj.postID}`)
+        .send({
+          title: 'this is new Post asdfasdf',
+          commentBody: 'There are many variations',
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('COMMENT_CREATED');
+    expect(res.body.data).not.toBeUndefined();
+  });
+
+  test('Should  Access with Authorization /api/v1/comment get()', async () => {
+    const res = await request(app).get('/api/v1/comment/').set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('GOT_ALL_COMMENTS');
+    expect(res.body.data).not.toBeUndefined();
   });
 });

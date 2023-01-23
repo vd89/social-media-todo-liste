@@ -25,5 +25,8 @@
 	"GOT_ALL_USERS": "GOT_ALL_USERS",
 	"GOT_USE": "GOT_USE",
 	"Wrong post Id pls check": "Wrong post Id pls check",
-	"POST_EDITED": "POST_EDITED"
+	"POST_EDITED": "POST_EDITED",
+	"COMMENT_CREATED": "COMMENT_CREATED",
+	"GOT_ALL_COMMENTS": "GOT_ALL_COMMENTS",
+	"Post Id is not valid and wrong pls check": "Post Id is not valid and wrong pls check"
 }
