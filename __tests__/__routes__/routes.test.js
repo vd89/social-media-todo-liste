@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../src/app.js';
 import { dropCollections, dropDatabase, setup } from '../../src/helper/dbConnectionHelper.js';
 import dummyData from '../__dummyData__/userDummyData.js';
-
+import { expect, test } from '@jest/globals';
 const {
   emailCheck,
   testUser,
@@ -15,7 +15,7 @@ const {
   wrongPass,
   correctUser,
 } = dummyData;
-
+let authToken = '';
 beforeAll(async () => {
   await setup();
 });
@@ -124,5 +124,83 @@ describe('User Login Route', () => {
     expect(user).not.toBeUndefined();
     expect(user.userName).toBe('jamesBond');
     expect(token).toBeDefined();
+    authToken = token;
+  });
+});
+
+const todo = {
+  todoId: '',
+};
+
+describe('Todo Routes', () => {
+  test('Test Route for the user /api/v1/todo get()', async () => {
+    const res = await request(app).get('/api/v1/todo/');
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(401);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('UNAUTHORIZED');
+  });
+
+  test('Test Route for the user to create POST-> /api/v1/todo', async () => {
+    const res = await request(app)
+        .post('/api/v1/todo/')
+        .send({
+          title: 'This is the new',
+          description: 'The test wot work',
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.data.isCompleted).toBeFalsy();
+    expect(res.body.status).toBe('SUCCESS');
+    todo.todoId = res.body.data._id;
+  });
+  test('Test Route for the user to create POST-> /api/v1/todo', async () => {
+    const res = await request(app)
+        .post(`/api/v1/todo/${todo.todoId}`)
+        .send({
+          title: 'Tis is edit',
+          description: 'The test wot work',
+          isCompleted: true,
+        })
+        .set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.data.isCompleted).toBe(true);
+    expect(res.body.data.title).toBeDefined();
+    expect(res.body.data.title).toBe('Tis is edit');
+    expect(res.body.status).toBe('Updated the todo');
+  });
+
+  test('Test Route for the user to create POST-> /api/v1/todo', async () => {
+    const res = await request(app).put(`/api/v1/todo/${todo.todoId}`).set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.data.isCompleted).toBe(true);
+    expect(res.body.data.title).toBeDefined();
+    expect(res.body.data.title).toBe('Tis is edit');
+    expect(res.body.status).toBe('Updated the todo');
+  });
+
+  test('Test Route for the user to create POST-> /api/v1/todo', async () => {
+    const res = await request(app).delete(`/api/v1/todo/${todo.todoId}`).set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.data.isCompleted).toBe(true);
+    expect(res.body.data.title).toBeDefined();
+    expect(res.body.data.title).toBe('Tis is edit');
+    expect(res.body.status).toBe('Deleted the todo');
+  });
+
+  test('Test Route for the user /api/v1/todo', async () => {
+    const res = await request(app).get('/api/v1/todo/').set('x-social-media-todo-token', `${authToken}`);
+    expect(res.headers['x-application-identifier']).toBe('social-media-todo-test');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).not.toBeUndefined();
+    expect(res.body.status).toBe('SUCCESS');
   });
 });
