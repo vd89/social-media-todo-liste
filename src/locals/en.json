@@ -20,5 +20,10 @@
 	"Updated the todo": "Updated the todo",
 	"Deleted the todo": "Deleted the todo",
 	"UNAUTHORIZED": "UNAUTHORIZED",
-	"Please check the todo id": "Please check the todo id"
+	"Please check the todo id": "Please check the todo id",
+	"POST_CREATED": "POST_CREATED",
+	"GOT_ALL_USERS": "GOT_ALL_USERS",
+	"GOT_USE": "GOT_USE",
+	"Wrong post Id pls check": "Wrong post Id pls check",
+	"POST_EDITED": "POST_EDITED"
 }

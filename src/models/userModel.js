@@ -1,6 +1,7 @@
+/* eslint-disable require-jsdoc */
 import { model, Schema } from 'mongoose';
 import { generateRandomString } from '../helper/encryptionHelper.js';
-
+import User from './modelCtrl/userModelCtrl.js';
 const _schema = new Schema(
     {
       userId: { type: String, unique: true, default: `user${generateRandomString(10)}` },
@@ -16,6 +17,6 @@ const _schema = new Schema(
     },
 );
 
-// _schema.loadClass();
+_schema.loadClass(User);
 
 export default model('User', _schema);

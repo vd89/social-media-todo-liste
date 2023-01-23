@@ -85,8 +85,8 @@ app.get('/', testAuth);
 app.get('/ping', pingRes);
 app.use('/api', apiRoutes);
 
-app.use(errHandler);
 app.use(unauthorizedErrors);
+app.use(errHandler);
 app.use(notFound);
 
 export default app;
