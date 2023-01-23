@@ -4,6 +4,11 @@ export default {
     email: 'JamesBond@gmail.com',
     password: 'Test_1234',
   },
+  todoUser: {
+    userName: 'willSmith',
+    email: 'willSmith@gmail.com',
+    password: 'Test_1234',
+  },
   errorResp: [
     {
       body: 'email',
